@@ -1,25 +1,12 @@
 import torchaudio
-import requests
 from transformers import AutoProcessor, SeamlessM4TModel
-
-# Set backend, if necessary torchaudio.set_audio_backend("soundfile") - but as per warning remove this
-# Removing it since dispatcher finds backend automatically, and the warning says it's a no-op anyway
 
 # Load the processor and model
 processor = AutoProcessor.from_pretrained("facebook/hf-seamless-m4t-medium")
 model = SeamlessM4TModel.from_pretrained("facebook/hf-seamless-m4t-medium")
 
-# Define the audio file URL and local path
-audio_url = "https://www2.cs.uic.edu/~i101/SoundFiles/preamble10.wav"
-local_audio_path = "preamble10.wav"
-
-# Download the audio file
-response = requests.get(audio_url)
-with open(local_audio_path, 'wb') as f:
-    f.write(response.content)
-
-# Read the downloaded audio file and resample to 16kHz
-audio, original_sample_rate = torchaudio.load(local_audio_path)
+# Read an audio file and resample to 16kHz
+audio, original_sample_rate = torchaudio.load("https://www2.cs.uic.edu/~i101/SoundFiles/preamble10.wav")
 audio = torchaudio.functional.resample(audio, orig_freq=original_sample_rate, new_freq=16000)  # Resampling to 16kHz
 
 # Process the audio with the processor
