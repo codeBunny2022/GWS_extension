@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat">
+            <!-- Chat messages will be populated here -->
+        </div>
+        <div id="user-input">
+            <select id="src-lang">
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+            </select>
+            <button id="start-btn">Record</button>
+            <div id="status-msg">Press "Record" to start</div>
+            <div id="progress-bar"><div id="progress"></div></div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
