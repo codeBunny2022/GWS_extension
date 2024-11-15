@@ -1,41 +1,44 @@
-import { getAuthToken, revokeAuthToken } from './oauth.js';
-import { buildPrompt } from './utils.js';
+document.getElementById("login").addEventListener("click", () => {
+    chrome.runtime.sendMessage({ type: "authenticate" }, (response) => {
+        if (response.token) {
+          alert("Authenticated Successfully!");
+        } else {
+          alert("Authentication Failed!");
+        }
+      });
+    });
 
-document.getElementById('submit').addEventListener('click', async () => {
-    const task = document.getElementById('task').value;
-    const responseElement = document.getElementById('response');
+    document.getElementById("start-task").addEventListener("click", () => {
+      chrome.runtime.sendMessage({ type: "authenticate" }, (response) => {
+        if (response.token) {
+          // Make a request to the Flask server with the obtained token
+          const requestData = {
+            task: "create_spreadsheet",
+            already_done: "",
+            workspace_content: "",
+            prompt_history: "",
+            current_service_url: "",
+            service_history: "",
+            token: response.token
+          };
 
-    const token = await getAuthToken();
-
-    // Dummy values for required fields, replace with actual data as needed
-    const data = {
-        task: task,
-        already_done: '',
-        workspace_content: '',
-        prompt_history: '',
-        current_service_url: 'http://example.com',
-        service_history: '',
-        token: token
-    };
-
-    const prompt = buildPrompt(data.task, data.already_done, data.workspace_content, data.prompt_history, data.current_service_url, data.service_history);
-
-    try {
-        const response = await fetch('YOUR_FLASK_SERVER_URL', {
-            method: 'POST',
+          fetch("http://localhost:5000/", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+              "Content-Type": "application/json"
             },
-            body: JSON.stringify({ ...data, prompt }),
-        });
-        const result = await response.json();
-        responseElement.textContent = JSON.stringify(result, null, 2);
-    } catch (error) {
-        responseElement.textContent = 'Error: ' + error.message;
-    }
-});
-
-document.getElementById('signout').addEventListener('click', async () => {
-    await revokeAuthToken();
-    alert('Signed out');
-});
+            body: JSON.stringify(requestData)
+          })
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("response").innerText = JSON.stringify(data);
+          })
+          .catch(error => {
+            document.getElementById("response").innerText = error.message;
+            console.error("Error:", error);
+          });
+        } else {
+          alert("Authentication Failed!");
+        }
+      });
+    });

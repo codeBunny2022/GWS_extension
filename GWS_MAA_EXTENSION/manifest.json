@@ -1,16 +1,24 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "GWS MAA Extension",
+  "description": "Automate tasks in Google Workspace",
   "version": "1.0",
-  "description": "Multi-Action Agent for Google Workspace",
-  "icons": {
-      "16": "assets/icon16.png",
-      "48": "assets/icon48.png",
-      "128": "assets/icon128.png"
-  },
+  "permissions": ["identity", "scripting", "activeTab"],
   "background": {
-      "scripts": ["background.js"],
-      "persistent": false
+      "service_worker": "background.js"
+  },
+  "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+          "16": "images/icon16.png",
+          "48": "images/icon48.png",
+          "128": "images/icon128.png"
+      }
+  },
+  "icons": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
   },
   "content_scripts": [
       {
@@ -18,30 +26,5 @@
           "js": ["content.js"]
       }
   ],
-  "permissions": [
-      "identity",
-      "activeTab",
-      "https://www.googleapis.com/",
-      "storage",
-      "tabs",
-      "http://*/*",
-      "https://*/*"
-  ],
-  "oauth2": {
-      "client_id": "THE_CLIENT_ID.apps.googleusercontent.com",
-      "scopes": [
-          "https://www.googleapis.com/auth/drive",
-          "https://www.googleapis.com/auth/gmail.send",
-          "https://www.googleapis.com/auth/spreadsheets",
-          "https://www.googleapis.com/auth/presentations"
-      ]
-  },
-  "browser_action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-          "16": "assets/icon16.png",
-          "48": "assets/icon48.png",
-          "128": "assets/icon128.png"
-      }
-  }
+  "host_permissions": ["http://localhost:5000/"]
 }

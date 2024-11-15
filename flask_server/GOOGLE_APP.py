@@ -8,7 +8,6 @@ import anthropic
 import time
 import datetime
 import logging
-import google.auth.transport.requests
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -69,7 +68,7 @@ You are GWMAA, a multi-action agent developed by "Google Workspace Team at Persi
 
 # Very Important Note!
 - Only and Only give a python dictionary or JSON in output.
-- Do not give response without JSON or dictionary format.
+- Do not give a response without JSON or dictionary format.
 
 ## Key Guidelines
 
@@ -84,7 +83,7 @@ You are GWMAA, a multi-action agent developed by "Google Workspace Team at Persi
 
 Provide a Python dictionary with two keys:
 
-1. thought: Your high level thought.
+1. thought: Your high-level thought.
 2. actions: A list of strings representing the step(s) to complete the task.
 
 ### Example Outputs
@@ -291,7 +290,7 @@ def update_spreadsheet(credentials, spreadsheet_id, range_name, values):
     try:
         service = build('sheets', 'v4', credentials=credentials)
         body = {
-            'values': values
+            'values': json.loads(values) if isinstance(values, str) else values
         }
         result = service.spreadsheets().values().update(
             spreadsheetId=spreadsheet_id, range=range_name,

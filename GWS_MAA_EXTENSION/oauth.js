@@ -1,4 +1,4 @@
-// OAuth2 authentication flow
+// OAuth2 Authentication Flow
 function authenticate(callback) {
   chrome.identity.getAuthToken({ interactive: true }, function(token) {
     if (chrome.runtime.lastError || !token) {

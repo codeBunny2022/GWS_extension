@@ -1,21 +1,17 @@
-chrome.runtime.onInstalled.addListener(function() {
-  console.log("GWS MAA Extension installed.");
+chrome.runtime.onInstalled.addListener(() => {
+  console.log("GWS MAA Extension installed");
 });
 
-chrome.browserAction.onClicked.addListener(function(tab) {
-  chrome.tabs.create({ url: chrome.extension.getURL('popup.html') });
-});
-
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.action === "auth") {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "authenticate") {
     chrome.identity.getAuthToken({ interactive: true }, function(token) {
       if (chrome.runtime.lastError || !token) {
         console.error(chrome.runtime.lastError);
-        sendResponse({ success: false, error: chrome.runtime.lastError });
+        sendResponse({ token: null });
       } else {
-        sendResponse({ success: true, token: token });
+        sendResponse({ token });
       }
     });
-    return true; // Will respond asynchronously.
+    return true; // Indicates that the response is sent asynchronously
   }
 });

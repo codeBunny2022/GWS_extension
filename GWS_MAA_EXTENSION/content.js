@@ -1,4 +1,3 @@
-// Basic content script to interact with the web page
 console.log("GWS MAA Content Script Loaded");
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
