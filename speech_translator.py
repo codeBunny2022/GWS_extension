@@ -53,9 +53,9 @@ def main():
             print(f"Error: {response['error']}")
 
         # Adding a simple mechanism to break the loop
-        if response["success"] and english_text.lower() in ["exit", "quit", "stop"]:
             print("Exiting...")
             break
+        if response["success"] and english_text.lower() in ["exit", "quit", "stop"]:
 
 if __name__ == "__main__":
     main()
